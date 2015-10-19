@@ -6,7 +6,7 @@ repositories {
 
 dependencies {
    compile project(':LBUtils')
-   compile project(':LBApplicationTools')
+   compile project(':LBApplication')
    compile 'junit:junit:4.12';
 }
 

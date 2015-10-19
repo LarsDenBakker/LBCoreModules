@@ -1,0 +1,92 @@
+#condition operations
+operationOne: #Conditional Operation
+   variables:
+      variableOne: blabla
+      variableTwo: $bla
+      variableThree: bla@blo@bi@
+   operations:
+      operationOne:
+         variables:
+            min: $variableOne
+            max: hehehehe
+            input: urank@$executor
+         type: operationType
+   conditions:
+      1:
+         if: operationOne, operationTwo, operationThree
+         then: operationFour
+         else: operationFive
+      2:
+         if: operationOne, operationTwo
+         then:
+            if: operationOne, operationTwo
+            then: 
+               
+operationTwo: #Procedural Operation
+   variables:
+      var1: bla
+      var2: $var1
+      var3: bla@blo@bli@
+   operations:
+      operationOne:
+         variables:
+            min: $variableOne
+            max: hehehehe
+            input: urank@$executor
+         type: operationType
+      operationTwo:
+         variables:
+            min: $variableOne
+            max: hehehehe
+            input: urank@$executor
+         type: operationType
+               
+               
+#core operations 
+operationOne: #BaseOperationTemplate
+   variables:
+      var1: bla
+      var2: $var1
+      var3: bla@blo@bli@
+   class: nl.larsdenbakker.operations.ChatOperation
+      
+#command
+commands:
+   command-one:
+
+
+command:
+   admin: true
+   root: true
+   operation: some-operation
+   arguments:
+      claim:
+         variable: blo
+         optional: false
+      new-name:
+         variable: blo
+         optional: false
+      dfafsd:
+         variable: blo
+         optional: true
+      sger:
+         variable: blo
+         optional: true
+   variables:
+      somevar: someval
+      othervar: otherval
+   sub-commands:
+      some-command:
+         operation:
+         arguments:
+            arg1: var1
+            arg2: var2
+            arg3: var3
+         sub-commands:
+            some-command:
+      some-other-command:
+         operation: some-operation
+         arguments:         
+            arg1: var1
+            arg2: var2
+            arg3: var3      

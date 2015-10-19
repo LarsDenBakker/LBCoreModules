@@ -1,0 +1,136 @@
+registry-commmands-all-info:
+   template:
+      all-info:
+         operation: data-info
+         arguments:
+            filter:
+               variable: value-filters
+               optional: true
+         variables:
+            target: $registry
+registry-commmands-info:
+   template:
+      info:
+         operation: data-info
+         arguments:
+            $registrable:
+               variable: target
+            filter:
+               variable: value-filters
+               optional: true
+         variables:
+            registry: $registry
+registry-commmands-create-0:
+   template:
+      create:
+         operation: property-holder-creation      
+         variables:
+            target: $registry
+registry-commmands-create-1:
+   template:
+      create:
+         operation: property-holder-creation
+         arguments:
+            $constructor-argument-1:
+               variable: constructor-arguments
+         variables:
+            target: $registry
+registry-commmands-create-2:
+   template:
+      create:
+         operation: property-holder-creation
+         arguments:
+            $constructor-argument-1:
+               variable: constructor-arguments
+            $constructor-argument-2:
+               variable: constructor-arguments
+         variables:
+            target: $registry
+registry-commmands-create-3:
+   template:
+      create:
+         operation: property-holder-creation
+         arguments:
+            $constructor-argument-1:
+               variable: constructor-arguments
+            $constructor-argument-2:
+               variable: constructor-arguments
+            $constructor-argument-3:
+               variable: constructor-arguments
+         variables:
+            target: $registry
+registry-commmands-create-4:
+   template:
+      create:
+         operation: property-holder-creation
+         arguments:
+            $constructor-argument-1:
+               variable: constructor-arguments
+            $constructor-argument-2:
+               variable: constructor-arguments
+            $constructor-argument-3:
+               variable: constructor-arguments
+            $constructor-argument-4:
+               variable: constructor-arguments
+         variables:
+            target: $registry
+registry-commmands-delete:
+   template:
+      delete:
+         operation: property-holder-deletion
+         arguments:
+            $registrable:
+               variable: target
+         variables:
+            registry: $registry   
+
+property-value-commands-set:
+   template:
+      set:
+         operation: property
+         arguments:
+            $registrable:
+               variable: target
+            $argument:
+               variable: argument
+         variables:
+            operator: set
+            property: $property
+            registry: $registry
+property-value-commands-add:
+   template:
+      add:
+         operation: property
+         arguments:
+            $registrable:
+               variable: target
+            $argument:
+               variable: argument
+         variables:
+            operator: add
+            property: $property
+            registry: $registry
+property-value-commands-remove:
+   template:
+      remove:
+         operation: property
+         arguments:
+            $registrable:
+               variable: target
+            $argument:
+               variable: argument
+         variables:
+            operator: remove
+            property: $property
+            registry: $registry
+property-value-commands-clear:
+   template:
+      clear:
+         operation: property
+         arguments:
+            $registrable:
+               variable: target
+         variables:
+            operator: clear
+            property: $property
+            registry: $registry

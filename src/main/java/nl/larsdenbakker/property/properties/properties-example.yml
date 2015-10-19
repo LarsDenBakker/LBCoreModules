@@ -1,0 +1,14 @@
+predefined:
+   uuid:
+      name: uuid
+      description: ID
+      auto-generate: true
+   name:
+      name: name
+      description: Name
+   threads:
+      name: threads
+      description: Threads
+   sub-forums:
+      name: sub-forums
+      description: Sub Forums

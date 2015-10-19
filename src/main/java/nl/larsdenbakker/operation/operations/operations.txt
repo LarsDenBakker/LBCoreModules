@@ -1,0 +1,47 @@
+operation:
+   name
+   error-message
+   success-message
+   report-errors
+
+targeted-operation:
+   target
+   validate-all-targets
+   registry
+
+info
+
+data-info
+   filters
+
+comparison
+   left
+   operator
+   right
+
+element-of
+   left
+   operator
+   right
+
+filter
+   allowed-values
+   blocked-values
+
+string-length
+   min-length
+   max-length
+
+string-only-ascii
+
+property
+   property
+   operator
+
+property-holder-creation
+   constructor-arguments   
+   target
+
+property-holder-deletion
+   registry
+   target

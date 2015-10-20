@@ -15,6 +15,8 @@ import nl.larsdenbakker.util.OperationResponse;
 import nl.larsdenbakker.util.TextUtils;
 
 /**
+ * Operation to read and describe a DataHolder. All the DataHolder's
+ * contents are queried and described.
  *
  * @author Lars den Bakker <larsdenbakker at gmail.com>
  */

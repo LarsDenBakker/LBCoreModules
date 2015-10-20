@@ -8,6 +8,7 @@ import nl.larsdenbakker.operation.OperationContext;
 import nl.larsdenbakker.app.InvalidInputException;
 
 /**
+ * A type of Operation with a Collection as target. Collection element type are specified.
  *
  * @author Lars den Bakker <larsdenbakker at gmail.com>
  */

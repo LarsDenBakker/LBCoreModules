@@ -8,6 +8,7 @@ import nl.larsdenbakker.operation.OperationContext;
 import nl.larsdenbakker.app.InvalidInputException;
 
 /**
+ * A type of targeted operation with a non collection or map as target.
  *
  * @author Lars den Bakker <larsdenbakker at gmail.com>
  */
@@ -41,6 +42,7 @@ public abstract class TargetedOperation<T> extends AbstractTargetedOperation<T> 
       }
    }
 
+   @Override
    public T getTarget() {
       return target;
    }

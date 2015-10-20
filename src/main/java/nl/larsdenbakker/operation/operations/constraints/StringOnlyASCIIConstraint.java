@@ -8,6 +8,7 @@ import nl.larsdenbakker.util.OperationResponse;
 import nl.larsdenbakker.util.TextUtils;
 
 /**
+ * Operation that checks if the target String contains only ASCII characters.
  *
  * @author Lars den Bakker <larsdenbakker at gmail.com>
  */

@@ -14,6 +14,8 @@ import nl.larsdenbakker.app.InvalidInputException;
 import nl.larsdenbakker.util.OperationResponse;
 
 /**
+ * A template that defines variables for the Operation that is to be executed. Subclasses
+ * provide implementation details for execution of the operation.
  *
  * @author Lars den Bakker <larsdenbakker at gmail.com>
  */

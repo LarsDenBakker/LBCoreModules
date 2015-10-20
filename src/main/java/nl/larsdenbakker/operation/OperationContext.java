@@ -81,7 +81,7 @@ public class OperationContext {
          Storage storage = getStorage();
          Storage parentStorage = (parent != null) ? parent.getStorage() : getStorage();
          for (Variable variable : template.getVariables()) {
-            variable.mapVariableToContext(parentStorage, storage);
+            variable.mapVariableToStorage(parentStorage, storage);
          }
          registerDefaults(storage);
          try {

@@ -1,20 +1,25 @@
-package nl.larsdenbakker.operation.operations;
+package nl.larsdenbakker.operation.operations.constraints;
 
 import java.util.ArrayList;
 import java.util.List;
 import nl.larsdenbakker.storage.Storage;
 import nl.larsdenbakker.operation.OperationContext;
 import nl.larsdenbakker.app.InvalidInputException;
+import nl.larsdenbakker.operation.operations.TargetedOperation;
 import nl.larsdenbakker.util.OperationResponse;
 import nl.larsdenbakker.util.TextUtils;
 
 /**
+ * Operation to check if the target is within the list of allowed values and not
+ * within the last of blocked values.
  *
  * @author Lars den Bakker<larsdenbakker@gmail.com>
  */
 public class FilterConstraint<T> extends TargetedOperation<T> {
 
+   /* The allowed values. Optional if blocked values are set. */
    public static final String KEY_ALLOWED_VALUES = "allowed-values".intern();
+   /* The blocked values. Optional of allowed values are set. */
    public static final String KEY_BLOCKED_VALUES = "blocked-values".intern();
 
    private final List<T> allowedValues;

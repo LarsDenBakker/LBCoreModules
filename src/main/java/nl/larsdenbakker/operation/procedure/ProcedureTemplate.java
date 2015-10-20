@@ -10,6 +10,7 @@ import nl.larsdenbakker.operation.variables.Variable;
 import nl.larsdenbakker.app.InvalidInputException;
 
 /**
+ * A template to that defines ProcedureTasks and variables for a Procedure.
  *
  * @author Lars den Bakker<larsdenbakker@gmail.com>
  */

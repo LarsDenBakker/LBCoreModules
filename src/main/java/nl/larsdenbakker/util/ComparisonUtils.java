@@ -2,13 +2,24 @@ package nl.larsdenbakker.util;
 
 import java.util.Collection;
 import nl.larsdenbakker.datapath.DataHolder;
-import static nl.larsdenbakker.util.ComparisonOperator.EQUAL;
+import static nl.larsdenbakker.util.ComparisonUtils.ComparisonOperator.EQUAL;
 
 /**
  *
  * @author Lars den Bakker<larsdenbakker@gmail.com>
  */
 public class ComparisonUtils {
+
+   public enum ComparisonOperator {
+
+      EQUAL,
+      NOT_EQUAL,
+      GREATER,
+      GREATER_OR_EQUAL,
+      LESS,
+      LESS_OR_EQUAL;
+
+   }
 
    public static boolean compare(ComparisonOperator operator, Object arg1, Object arg2) {
       if (operator == null || arg1 == null || arg2 == null) {

@@ -10,7 +10,13 @@ import nl.larsdenbakker.registry.Registry;
 import nl.larsdenbakker.app.ApplicationUser;
 
 /**
- * A user-friendly and 
+ * Helper class to create shortcuts and simplify operation execution. Variables can be pre-defined
+ * and optional and non-optional command arguments can be defined and mapped to variables. Review
+ * the project documentation for an overview of the configuration syntax.
+ *
+ * This class is only used internally. Commands are created and registered through the CommandFactory
+ * and executed through the CommandExecutor.
+ *
  * @author Lars den Bakker <larsdenbakker at gmail.com>
  */
 public class Command implements Registrable<String> {

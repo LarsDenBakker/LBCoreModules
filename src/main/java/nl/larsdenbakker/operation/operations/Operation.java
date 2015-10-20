@@ -7,14 +7,21 @@ import nl.larsdenbakker.app.InvalidInputException;
 import nl.larsdenbakker.util.OperationResponse;
 
 /**
+ * A class that handles safe execution of used-defined actions, returning
+ * whether or not the operation has been successful as well as any errors
+ * that occurred.
  *
  * @author Lars den Bakker <larsdenbakker at gmail.com>
  */
 public abstract class Operation {
 
+   /* The name of the operation. */
    public static final String KEY_NAME = "operation-name".intern();
+   /* The custom error message to display instead of the regular errors. Optional. */
    public static final String KEY_ERROR_MESSAGE = "error-message".intern();
+   /* The custom success message to display instead of regular success message. Optional */
    public static final String KEY_SUCCESS_MESSAGE = "success-message".intern();
+   /* Whether or not to report any errors. Default true */
    public static final String KEY_REPORT_ERRORS = "report-errors".intern();
 
    private final OperationContext context;

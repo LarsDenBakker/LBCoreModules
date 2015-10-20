@@ -8,12 +8,15 @@ import nl.larsdenbakker.app.InvalidInputException;
 import nl.larsdenbakker.util.OperationResponse;
 
 /**
+ * A type of operation that checks if the size of the target collection is within the provided range.
  *
  * @author Lars den Bakker <larsdenbakker at gmail.com>
  */
 public class CollectionSizeConstraint extends CollectionTargetOperation<Collection<Object>, Object> {
 
+   /* The minimum size. Optional if a maximum is set. */
    public static final String KEY_MIN_SIZE = "min-size".intern();
+   /* The maximum size. Optional if a minimum is set. */
    public static final String KEY_MAX_SIZE = "max-size".intern();
 
    private final int minSize;

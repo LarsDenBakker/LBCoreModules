@@ -15,9 +15,9 @@ import nl.larsdenbakker.operation.command.CommandRegistry;
 import nl.larsdenbakker.operation.operations.constraints.CollectionSizeConstraint;
 import nl.larsdenbakker.operation.operations.ComparisonOperation;
 import nl.larsdenbakker.operation.operations.DataHolderInfoOperation;
-import nl.larsdenbakker.operation.operations.DataPathInfoOperation;
+import nl.larsdenbakker.operation.operations.InfoOperation;
 import nl.larsdenbakker.operation.operations.ElementOfOperation;
-import nl.larsdenbakker.operation.operations.FilterConstraint;
+import nl.larsdenbakker.operation.operations.constraints.FilterConstraint;
 import nl.larsdenbakker.operation.operations.constraints.BigDecimalSizeConstraint;
 import nl.larsdenbakker.operation.operations.constraints.DoubleSizeConstraint;
 import nl.larsdenbakker.operation.operations.constraints.IntegerSizeConstraint;
@@ -62,7 +62,7 @@ public class OperationModule extends AbstractModule {
       registryModule.getRootRegistry().register(commandRegistry);
 
       OperationFactory.registerOperations(this, this, "comparison", ComparisonOperation.class);
-      OperationFactory.registerOperations(this, this, "info", DataPathInfoOperation.class);
+      OperationFactory.registerOperations(this, this, "info", InfoOperation.class);
       OperationFactory.registerOperations(this, this, "data-info", DataHolderInfoOperation.class);
 
       OperationFactory.registerOperations(this, this, "element-of", ElementOfOperation.class);

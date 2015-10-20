@@ -10,6 +10,7 @@ import static nl.larsdenbakker.operation.operations.AbstractTargetedOperation.KE
 import nl.larsdenbakker.app.InvalidInputException;
 
 /**
+ * A type of operation that has a map as target. Map key and value types can be defined.
  *
  * @author Lars den Bakker <larsdenbakker at gmail.com>
  */

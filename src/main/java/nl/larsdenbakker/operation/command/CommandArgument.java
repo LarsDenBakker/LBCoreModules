@@ -1,6 +1,8 @@
 package nl.larsdenbakker.operation.command;
 
 /**
+ * Argument for a Command. Arguments can be optional or non-optional
+ * and are mapped to an operation variable.
  *
  * @author Lars den Bakker<larsdenbakker@gmail.com>
  */

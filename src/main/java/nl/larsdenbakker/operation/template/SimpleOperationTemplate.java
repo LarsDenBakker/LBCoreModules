@@ -11,6 +11,8 @@ import nl.larsdenbakker.operation.variables.Variable;
 import nl.larsdenbakker.app.InvalidInputException;
 
 /**
+ * A type of OperationTemplate that executes an Operation defined in-code
+ * by an implementation of Operation.
  *
  * @author Lars den Bakker<larsdenbakker@gmail.com>
  */

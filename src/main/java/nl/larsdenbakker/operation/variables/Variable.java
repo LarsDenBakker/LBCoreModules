@@ -6,6 +6,13 @@ import nl.larsdenbakker.operation.OperationModule;
 import nl.larsdenbakker.util.TextUtils;
 
 /**
+ * A key-value mapping with a method to map this variable from one storage
+ * to another. The variable String key is non-null, the value is nullable.
+ * Any value stored in the parent storage to the same key as this variable
+ * overrides any value set for this variable. Data-paths are resolved, other
+ * variables can be defined as a string value with a $ preceding the key of
+ * the variable. These variables are then looked up in the parent storage, and
+ * their value is set as this variable's value in the sub storage.
  *
  * @author Lars den Bakker <larsdenbakker at gmail.com>
  */
@@ -13,12 +20,12 @@ public class Variable {
 
    private final String name;
    private final Object value;
-   private final OperationModule operationHandler;
+   private final OperationModule operationModule;
 
-   public Variable(OperationModule operationHandler, String name, Object value) {
+   public Variable(OperationModule operationModule, String name, Object value) {
       this.name = name.intern();
       this.value = value;
-      this.operationHandler = operationHandler;
+      this.operationModule = operationModule;
    }
 
    public String getName() {
@@ -29,7 +36,7 @@ public class Variable {
       return value;
    }
 
-   public void mapVariableToContext(Storage parentStorage, Storage storage) {
+   public void mapVariableToStorage(Storage parentStorage, Storage storage) {
       //If key was already set in parentStorage, it overrides anything we have
       if (parentStorage != null && parentStorage.isSet(name)) {
          storage.set(name, parentStorage.get(name));
@@ -73,7 +80,7 @@ public class Variable {
             storage.set(name, sb.toString());
          } else if (stringValue.startsWith(".")) {
             try {
-               Object obj = operationHandler.getDataPathModule().resolveDataPath(operationHandler.getRegistryModule().getRootRegistry(), stringValue);
+               Object obj = operationModule.getDataPathModule().resolveDataPath(operationModule.getRegistryModule().getRootRegistry(), stringValue);
                if (obj != null) {
                   storage.set(name, obj);
                }
@@ -87,12 +94,12 @@ public class Variable {
                Object registry = (parentStorage != null) ? parentStorage.get(split[1]) : null;
                if (registry != null) {
                   try {
-                     Object obj = operationHandler.getDataPathModule().resolveDataPath(registry, split[0]);
+                     Object obj = operationModule.getDataPathModule().resolveDataPath(registry, split[0]);
                      if (obj != null) {
                         storage.set(name, obj);
                      }
                   } catch (DataPathResolveException ex) {
-                     
+
                   }
                }
             }

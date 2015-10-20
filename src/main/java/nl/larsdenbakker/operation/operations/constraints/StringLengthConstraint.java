@@ -7,12 +7,15 @@ import nl.larsdenbakker.app.InvalidInputException;
 import nl.larsdenbakker.util.OperationResponse;
 
 /**
+ * A type of operation that checks if the String target is within the given size range.
  *
  * @author Lars den Bakker <larsdenbakker at gmail.com>
  */
 public class StringLengthConstraint extends TargetedOperation<String> {
 
+   /* The minimum size. Optional if a maximum is set. */
    public static final String KEY_MIN_LENGTH = "min-length".intern();
+   /* The maximum size. Optional if a minimum is set. */
    public static final String KEY_MAX_LENGTH = "max-length".intern();
 
    private final int maxLength;

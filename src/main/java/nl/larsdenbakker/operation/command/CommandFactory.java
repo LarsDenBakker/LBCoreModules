@@ -16,34 +16,78 @@ import nl.larsdenbakker.app.InvalidInputException;
 import static nl.larsdenbakker.util.Message.Type.INFO;
 
 /**
+ * Factory to create and register commands.
  *
  * @author Lars den Bakker <larsdenbakker at gmail.com>
  */
 public class CommandFactory {
 
-   public static void registerCommands(Module parentModule, OperationModule operationModule, String fileName) throws DataFileException, InvalidInputException {
+   /**
+    * Create and register commands from configuration. Configuration is read from the
+    * the module's default resource (jar file) and configuration file locations.
+    *
+    * @param parentModule    The module the commands are registered from.
+    * @param operationModule The associated OperationModule.
+    * @param fileName        The name of the configuration file.
+    *
+    * @throws DataFileException     if anything goes wrong when loading the file.
+    * @throws InvalidInputException if there were any problems parsing the configuration.
+    */
+   public static void createAndRegisterCommands(Module parentModule, OperationModule operationModule, String fileName) throws DataFileException, InvalidInputException {
       try {
          Map<String, Object> configuration = ApplicationUtils.loadModuleConfiguration(parentModule, fileName);
-         registerCommands(parentModule, operationModule, configuration);
+         CommandFactory.createAndRegisterCommands(parentModule, operationModule, configuration);
       } catch (InvalidInputException ex) {
          throw ex.addFailedAction("reading file: '" + fileName + "'");
       }
    }
 
-   public static void registerCommands(Module parentModule, OperationModule operationModule, DataFile dataFile) throws DataFileException, InvalidInputException {
+   /**
+    * Create and register commands from configuration. Configuration is read from the
+    * the provided DataFile.
+    *
+    * @param parentModule    The module the commands are registered from.
+    * @param operationModule The associated OperationModule.
+    * @param dataFile        The data file containing the command configuration.
+    *
+    * @throws DataFileException     if anything goes wrong when loading the file.
+    * @throws InvalidInputException if there were any problems parsing the configuration.
+    */
+   public static void createAndRegisterCommands(Module parentModule, OperationModule operationModule, DataFile dataFile) throws DataFileException, InvalidInputException {
       try {
          Map<String, Object> fileContents = dataFile.load();
-         registerCommands(parentModule, operationModule, fileContents);
+         CommandFactory.createAndRegisterCommands(parentModule, operationModule, fileContents);
       } catch (InvalidInputException ex) {
          throw ex.addFailedAction("reading file '" + dataFile.getFile() + "'");
       }
    }
 
-   public static void registerCommands(Module parentModule, OperationModule operationModule, Map<String, Object> map) throws InvalidInputException {
-      registerCommands(parentModule, operationModule, MemoryStorage.create(operationModule.getConversionModule(), map));
+   /**
+    * Create and register commands from configuration. Configuration is read from the
+    * the provided map.
+    *
+    * @param parentModule    The module the commands are registered from.
+    * @param operationModule The associated OperationModule.
+    * @param map             The map containing the command configuration.
+    *
+    * @throws DataFileException     if anything goes wrong when loading the file.
+    * @throws InvalidInputException if there were any problems parsing the configuration.
+    */
+   public static void createAndRegisterCommands(Module parentModule, OperationModule operationModule, Map<String, Object> map) throws InvalidInputException {
+      CommandFactory.createAndRegisterCommands(parentModule, operationModule, MemoryStorage.create(operationModule.getConversionModule(), map));
    }
 
-   public static void registerCommands(Module parentModule, OperationModule operationModule, Storage storage) throws InvalidInputException {
+   /**
+    * Create and register commands from configuration. Configuration is read from the
+    * the provided storage.
+    *
+    * @param parentModule    The module the commands are registered from.
+    * @param operationModule The associated OperationModule.
+    * @param storage         The name storage containing command configuration.
+    *
+    * @throws InvalidInputException if there were any problems parsing the configuration.
+    */
+   public static void createAndRegisterCommands(Module parentModule, OperationModule operationModule, Storage storage) throws InvalidInputException {
       try {
          int count = 0;
          Storage commandsStorage = storage.getAndAssertStorage("commands");

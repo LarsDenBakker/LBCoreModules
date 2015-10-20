@@ -7,12 +7,13 @@ import nl.larsdenbakker.util.OperationResponse;
 import nl.larsdenbakker.util.TextUtils;
 
 /**
+ * Operation to read and describe the specified value.
  *
  * @author Lars den Bakker <larsdenbakker at gmail.com>
  */
-public class DataPathInfoOperation extends TargetedOperation<Object> {
+public class InfoOperation extends TargetedOperation<Object> {
 
-   public DataPathInfoOperation(OperationContext context, Storage storage) throws InvalidInputException {
+   public InfoOperation(OperationContext context, Storage storage) throws InvalidInputException {
       super(context, storage, Object.class);
    }
 

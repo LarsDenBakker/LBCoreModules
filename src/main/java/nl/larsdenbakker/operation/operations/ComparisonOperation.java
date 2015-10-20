@@ -4,18 +4,24 @@ import java.util.ArrayList;
 import java.util.List;
 import nl.larsdenbakker.storage.Storage;
 import nl.larsdenbakker.operation.OperationContext;
-import nl.larsdenbakker.util.DataUtils;
+import nl.larsdenbakker.util.ComparisonUtils;
 import nl.larsdenbakker.app.InvalidInputException;
+import nl.larsdenbakker.util.ComparisonUtils.ComparisonOperator;
 import nl.larsdenbakker.util.OperationResponse;
 
 /**
+ * Operation that compares two values and returns the result. ComparisonUtils is used
+ * to compare the two values. Results are identical to ComparisonUtils.compare(operator, left, right).
  *
  * @author Lars den Bakker<larsdenbakker@gmail.com>
  */
 public class ComparisonOperation extends Operation {
 
+   /* The left hand side of the operation */
    public static final String KEY_LEFT = "left".intern();
+   /* The operator of the operation */
    public static final String KEY_OPERATOR = "operator".intern();
+   /* The right hand side of the operation */
    public static final String KEY_RIGHT = "right".intern();
 
    private final ComparisonOperator operator;
@@ -33,14 +39,14 @@ public class ComparisonOperation extends Operation {
    protected OperationResponse _execute() {
       if (left.size() == 1) {
          if (right.size() == 1) {
-            return OperationResponse.of(DataUtils.compare(operator, left.get(0), right.get(0)));
+            return OperationResponse.of(ComparisonUtils.compare(operator, left.get(0), right.get(0)));
          } else {
-            return OperationResponse.of(DataUtils.compare(operator, left.get(0), right));
+            return OperationResponse.of(ComparisonUtils.compare(operator, left.get(0), right));
          }
       } else if (right.size() == 1) {
-         return OperationResponse.of(DataUtils.compare(operator, left, right.get(0)));
+         return OperationResponse.of(ComparisonUtils.compare(operator, left, right.get(0)));
       } else {
-         return OperationResponse.of(DataUtils.compare(operator, left, right));
+         return OperationResponse.of(ComparisonUtils.compare(operator, left, right));
       }
    }
 

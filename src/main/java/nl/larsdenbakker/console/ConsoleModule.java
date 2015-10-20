@@ -1,6 +1,5 @@
 package nl.larsdenbakker.console;
 
-import nl.larsdenbakker.operation.command.CommandTargetProvider;
 import java.util.Scanner;
 import nl.larsdenbakker.app.AbstractModule;
 import nl.larsdenbakker.app.Application;
@@ -20,7 +19,8 @@ import static nl.larsdenbakker.util.Message.Type.RAW;
 import nl.larsdenbakker.util.OperationResponse;
 import nl.larsdenbakker.util.TextUtils;
 import nl.larsdenbakker.app.UserInputException;
-import nl.larsdenbakker.operation.OperationExecutor;
+import nl.larsdenbakker.operation.command.SimpleCommandArgumentProvider;
+import nl.larsdenbakker.operation.operations.TargetedOperation;
 
 /**
  * Module to provide a command console for users to send commands
@@ -77,10 +77,10 @@ public class ConsoleModule extends AbstractModule {
       OperationFactory.registerOperations(this, operationModule, "save-application", ApplicationSaveOperation.class);
       OperationFactory.registerOperations(this, operationModule, "load-module", ModuleLoadOperation.class);
 
-      operationModule.registerCommandArgumentProvider(new CommandTargetProvider(this), "quit");
-      operationModule.registerCommandArgumentProvider(new CommandTargetProvider(getParentApplication()), "load");
+      operationModule.registerCommandArgumentProvider(new SimpleCommandArgumentProvider(TargetedOperation.KEY_TARGET, this), "quit");
+      operationModule.registerCommandArgumentProvider(new SimpleCommandArgumentProvider(TargetedOperation.KEY_TARGET, getParentApplication()), "load");
 
-      CommandFactory.registerCommands(this, operationModule, "commands");
+      CommandFactory.createAndRegisterCommands(this, operationModule, "commands");
    }
 
    @Override

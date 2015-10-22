@@ -14,7 +14,7 @@ import nl.larsdenbakker.storage.Storage;
 import nl.larsdenbakker.datafile.DataFileUtils;
 
 /**
- * A grouping of Properties belonging to a PropertyHolder. Only one instance of
+ * A grouping of Properties belonging to a PropertyHolder type. Only one instance of
  * each of a Properties subtype is created and the same instance is registered
  * to all PropertyHolders of the associated type.
  *

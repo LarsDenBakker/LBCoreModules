@@ -2,7 +2,6 @@ package nl.larsdenbakker.conversion.converters;
 
 import com.google.common.base.Preconditions;
 import nl.larsdenbakker.conversion.ConversionException;
-import nl.larsdenbakker.util.ClassUtils;
 
 /**
  *

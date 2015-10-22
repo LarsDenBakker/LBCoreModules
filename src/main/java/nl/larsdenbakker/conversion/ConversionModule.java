@@ -132,7 +132,8 @@ public class ConversionModule extends AbstractModule {
     * @throws ConversionException
     */
    public <T> T convert(Object obj, Class<T> returnType) throws ConversionException {
-      checkNotNull(obj, returnType);
+      checkNotNull(obj);
+      checkNotNull(returnType);
       //Look for a weak converter first, return if succesful.
       for (DataConversionOverride converter : getWeakConverters()) {
          T returnObject = converter.convert(obj, returnType);

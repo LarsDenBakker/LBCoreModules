@@ -10,7 +10,7 @@ import nl.larsdenbakker.conversion.converters.BigDecimalConverter;
 import nl.larsdenbakker.conversion.converters.LongConverter;
 import nl.larsdenbakker.conversion.converters.BooleanConverter;
 import nl.larsdenbakker.conversion.converters.ShortConverter;
-import nl.larsdenbakker.conversion.converters.WeakDataConverter;
+import nl.larsdenbakker.conversion.converters.DataConversionOverride;
 import nl.larsdenbakker.conversion.converters.SuperTypeDataConverter;
 import nl.larsdenbakker.conversion.converters.DataConverter;
 import nl.larsdenbakker.conversion.converters.UUIDConverter;
@@ -55,7 +55,7 @@ public class ConversionModule extends AbstractModule {
 
    private final Map<Class<?>, DataConverter> converters = new HashMap<>();
    private final Map<Class<?>, SuperTypeDataConverter> superClassConverters = new HashMap<>();
-   private final List<WeakDataConverter> weakConverters = new ArrayList<>();
+   private final List<DataConversionOverride> weakConverters = new ArrayList<>();
 
    private final Map<Collection, Class<?>> collectionElementTypeCache = new WeakHashMap<>();
    private final Map<Map, Pair<Class<?>, Class<?>>> mapKeyValueTypesCache = new WeakHashMap<>();
@@ -134,7 +134,7 @@ public class ConversionModule extends AbstractModule {
    public <T> T convert(Object obj, Class<T> returnType) throws ConversionException {
       checkNotNull(obj, returnType);
       //Look for a weak converter first, return if succesful.
-      for (WeakDataConverter converter : getWeakConverters()) {
+      for (DataConversionOverride converter : getWeakConverters()) {
          T returnObject = converter.convert(obj, returnType);
          if (returnObject != null) {
             return returnObject;
@@ -470,15 +470,15 @@ public class ConversionModule extends AbstractModule {
       return typeMappings.get(key.toLowerCase());
    }
 
-   public void registerWeakConverter(WeakDataConverter converter) {
+   public void registerConversionOverride(DataConversionOverride converter) {
       weakConverters.add(converter);
    }
 
-   public boolean unregisterWeakConverter(WeakDataConverter converter) {
+   public boolean unregisterConversionOverride(DataConversionOverride converter) {
       return weakConverters.remove(converter);
    }
 
-   public List<WeakDataConverter> getWeakConverters() {
+   public List<DataConversionOverride> getWeakConverters() {
       return weakConverters;
    }
 

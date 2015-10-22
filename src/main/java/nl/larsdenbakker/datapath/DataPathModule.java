@@ -64,14 +64,14 @@ public class DataPathModule extends AbstractModule {
       dataReferenceConverter = new DataReferenceConverter(this);
       
       ConversionModule module = getConversionModule();
-      module.registerWeakConverter(dataPathConverter);
+      module.registerConversionOverride(dataPathConverter);
       module.registerConverter(dataReferenceConverter);
    }
    
    @Override
    public void _unload() {
       ConversionModule module = getConversionModule();
-      module.unregisterWeakConverter(dataPathConverter);
+      module.unregisterConversionOverride(dataPathConverter);
    }
    
    public ConversionModule getConversionModule() {

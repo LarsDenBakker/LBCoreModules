@@ -1,6 +1,6 @@
 package nl.larsdenbakker.datapath.converters;
 
-import nl.larsdenbakker.conversion.converters.WeakDataConverter;
+import nl.larsdenbakker.conversion.converters.DataConversionOverride;
 import nl.larsdenbakker.datapath.DataPathModule;
 import nl.larsdenbakker.datapath.DataPathResolveException;
 
@@ -8,7 +8,7 @@ import nl.larsdenbakker.datapath.DataPathResolveException;
  *
  * @author Lars den Bakker<larsdenbakker@gmail.com>
  */
-public class DataPathConverter extends WeakDataConverter {
+public class DataPathConverter extends DataConversionOverride {
 
    private final DataPathModule dataPathHandler;
 

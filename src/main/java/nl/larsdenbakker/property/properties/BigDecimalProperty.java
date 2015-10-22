@@ -11,11 +11,13 @@ import nl.larsdenbakker.storage.Storage;
  */
 public class BigDecimalProperty extends SimpleProperty<BigDecimal> {
 
+   public static final String KEY_SCALE = "scale";
+
    private final int scale;
 
    public BigDecimalProperty(Storage storage) {
       super(storage, BigDecimal.class);
-      this.scale = storage.get("scale", Integer.class, 2);
+      this.scale = storage.get(KEY_SCALE, Integer.class, 2);
    }
 
    @Override

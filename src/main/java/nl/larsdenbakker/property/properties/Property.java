@@ -20,6 +20,13 @@ import nl.larsdenbakker.util.OperationResponse;
  */
 public interface Property<V> extends Describable {
 
+   public static final String KEY_NAME = "name".intern();
+   public static final String KEY_DESCRIPTION = "description".intern();
+   public static final String KEY_DEFAULT_VALUE = "default-value";
+   public static final String KEY_VALIDATION_OPERATIONS = "validation-operations";
+   public static final String KEY_NULLABLE = "nullable".intern();
+   public static final String KEY_CONSTRUCTOR_PARAMETERS = "constructor-parameters";
+
    public Class<V> getPropertyValueClass();
 
    /**

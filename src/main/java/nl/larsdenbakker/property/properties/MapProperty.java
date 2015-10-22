@@ -22,24 +22,28 @@ import nl.larsdenbakker.util.TextUtils;
  */
 public class MapProperty<K, V> extends StorageProperty<Map<K, V>> {
 
+   public static final String KEY_KEY_VALIDATION_OPERATIONS = "key-validation-operations";
+   public static final String KEY_VALUE_VALIDATION_OPERATIONS = "value-validation-operations";
+   public static final String KEY_ENTRY_VALIDATION_OPERATIONS = "entry-validation-operations";
+
    private final Class<K> keyType;
    private final Class<V> valueType;
    private final Class<? extends Map<K, V>> mapType;
-   private final OperationTemplate[] keyConstraintOperations;
-   private final OperationTemplate[] valueConstraintOperations;
-   private final OperationTemplate[] entryConstraintOperations;
+   private final OperationTemplate[] keyValidationOperations;
+   private final OperationTemplate[] valueValidationOperations;
+   private final OperationTemplate[] entryValidationOperations;
 
    public MapProperty(Storage storage, Class<? extends Map<K, V>> mapType, Class<K> keyType, Class<V> valueType) {
       super(storage, (Class<Map<K, V>>) ((Class) Map.class));
       this.mapType = mapType;
       this.keyType = keyType;
       this.valueType = valueType;
-      List<OperationTemplate> keyConstraintList = storage.getCollection("key-constraint-operations", List.class, OperationTemplate.class, false);
-      this.keyConstraintOperations = (keyConstraintList != null) ? CollectionUtils.asArrayOfType(OperationTemplate.class, keyConstraintList) : null;
-      List<OperationTemplate> valueConstraintList = storage.getCollection("value-constraint-operations", List.class, OperationTemplate.class, false);
-      this.valueConstraintOperations = (valueConstraintList != null) ? CollectionUtils.asArrayOfType(OperationTemplate.class, valueConstraintList) : null;
-      List<OperationTemplate> entryConstraintList = storage.getCollection("entry-constraint-operations", List.class, OperationTemplate.class, false);
-      this.entryConstraintOperations = (entryConstraintList != null) ? CollectionUtils.asArrayOfType(OperationTemplate.class, entryConstraintList) : null;
+      List<OperationTemplate> keyConstraintList = storage.getCollection(KEY_KEY_VALIDATION_OPERATIONS, List.class, OperationTemplate.class, false);
+      this.keyValidationOperations = (keyConstraintList != null) ? CollectionUtils.asArrayOfType(OperationTemplate.class, keyConstraintList) : null;
+      List<OperationTemplate> valueConstraintList = storage.getCollection(KEY_VALUE_VALIDATION_OPERATIONS, List.class, OperationTemplate.class, false);
+      this.valueValidationOperations = (valueConstraintList != null) ? CollectionUtils.asArrayOfType(OperationTemplate.class, valueConstraintList) : null;
+      List<OperationTemplate> entryConstraintList = storage.getCollection(KEY_ENTRY_VALIDATION_OPERATIONS, List.class, OperationTemplate.class, false);
+      this.entryValidationOperations = (entryConstraintList != null) ? CollectionUtils.asArrayOfType(OperationTemplate.class, entryConstraintList) : null;
    }
 
    @Override
@@ -58,12 +62,12 @@ public class MapProperty<K, V> extends StorageProperty<Map<K, V>> {
    @Override
    public void validate(Map<K, V> val) throws PropertyValidationException {
       super.validate(val);
-      if (keyConstraintOperations != null || valueConstraintOperations != null || entryConstraintOperations != null) {
+      if (keyValidationOperations != null || valueValidationOperations != null || entryValidationOperations != null) {
          for (Entry<K, V> entry : val.entrySet()) {
             if (entry.getValue() != null) {
 
-               if (keyConstraintOperations != null) {
-                  for (OperationTemplate template : keyConstraintOperations) {
+               if (keyValidationOperations != null) {
+                  for (OperationTemplate template : keyValidationOperations) {
                      OperationResponse response = template.execute(MapUtils.of(TargetedOperation.KEY_TARGET, entry.getKey()));
                      if (!response.hasSucceeded()) {
                         throw new PropertyValidationException("Error at key " + entry.getKey() + ": " + response.getMessage());
@@ -71,8 +75,8 @@ public class MapProperty<K, V> extends StorageProperty<Map<K, V>> {
                   }
                }
 
-               if (valueConstraintOperations != null) {
-                  for (OperationTemplate template : valueConstraintOperations) {
+               if (valueValidationOperations != null) {
+                  for (OperationTemplate template : valueValidationOperations) {
                      OperationResponse response = template.execute(MapUtils.of(TargetedOperation.KEY_TARGET, entry.getValue()));
                      if (!response.hasSucceeded()) {
                         throw new PropertyValidationException("Error at value " + entry.getValue() + ": " + response.getMessage());
@@ -80,8 +84,8 @@ public class MapProperty<K, V> extends StorageProperty<Map<K, V>> {
                   }
                }
 
-               if (entryConstraintOperations != null) {
-                  for (OperationTemplate template : entryConstraintOperations) {
+               if (entryValidationOperations != null) {
+                  for (OperationTemplate template : entryValidationOperations) {
                      OperationResponse response = template.execute(MapUtils.of(TargetedOperation.KEY_TARGET, new Pair(entry.getKey(), entry.getValue())));
                      if (!response.hasSucceeded()) {
                         throw new PropertyValidationException("Error at entry " + entry.getKey() + "=" + entry.getValue() + ": " + response.getMessage());

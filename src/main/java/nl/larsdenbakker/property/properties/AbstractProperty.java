@@ -22,13 +22,13 @@ public abstract class AbstractProperty<V> implements Property<V> {
 
    public AbstractProperty(Storage config, Class<V> propertyValueClass) {
       this.propertyValueClass = propertyValueClass;
-      this.name = config.get("name", config.getStorageKey());
-      this.description = config.get("description", name);
-      this.defaultValue = config.get("default-value", propertyValueClass);
-      List<OperationTemplate> validationOperationsList = config.getCollection("validation-operations", List.class, OperationTemplate.class, false);
+      this.name = config.get(KEY_NAME, config.getStorageKey());
+      this.description = config.get(KEY_DESCRIPTION, name);
+      this.defaultValue = config.get(KEY_DEFAULT_VALUE, propertyValueClass);
+      List<OperationTemplate> validationOperationsList = config.getCollection(KEY_VALIDATION_OPERATIONS, List.class, OperationTemplate.class, false);
       this.validationOperations = (validationOperationsList != null) ? CollectionUtils.asArrayOfType(OperationTemplate.class, validationOperationsList) : null;
-      this.nullable = config.get("nullable", true);
-      this.constructorParameter = config.get("constructor-parameter", false);
+      this.nullable = config.get(KEY_NULLABLE, true);
+      this.constructorParameter = config.get(KEY_CONSTRUCTOR_PARAMETERS, false);
    }
 
    @Override

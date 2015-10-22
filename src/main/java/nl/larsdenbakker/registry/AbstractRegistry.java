@@ -1,7 +1,6 @@
 package nl.larsdenbakker.registry;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import java.io.IOException;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -169,6 +168,16 @@ public abstract class AbstractRegistry<K, V> extends AbstractDataHolder implemen
    @Override
    public Module getParentModule() {
       return parentModule;
+   }
+
+   @Override
+   public K getKeyFor(V val) {
+      for (Entry<K, V> entry : map.entrySet()) {
+         if (entry.getValue().equals(val)) {
+            return entry.getKey();
+         }
+      }
+      return null;
    }
 
 }

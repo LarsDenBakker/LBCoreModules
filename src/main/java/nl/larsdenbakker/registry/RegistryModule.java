@@ -49,7 +49,7 @@ public class RegistryModule extends AbstractModule {
                                         MapUtils.of(DataPathRoot.class,
                                                     dataPathRootRegistry));
 
-      getConversionModule().registerSuperTypeConverter(new RegistryConverter(rootRegistry));
+      getConversionModule().registerSuperTypeConverter(new RegistryValueConverter(rootRegistry));
    }
 
    @Override

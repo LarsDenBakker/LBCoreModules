@@ -13,8 +13,8 @@ public class RootRegistry extends RegisterableRegistry<String, Registry<?, ?>> {
    }
 
    /**
-    * Register a value and create a register RegistryConverter for the Registry.
-    * See the RegistryConverter class for more information.
+    * Register a value and create a register RegistryValueConverter for the Registry.
+    * See the RegistryValueConverter class for more information.
     *
     * @param key
     * @param val
@@ -24,7 +24,7 @@ public class RootRegistry extends RegisterableRegistry<String, Registry<?, ?>> {
    @Override
    public boolean register(String key, Registry<?, ?> val) {
       if (super.register(key, val)) {
-         RegistryConverter converter = new RegistryConverter(val);
+         RegistryValueConverter converter = new RegistryValueConverter(val);
          getConversionModule().registerSuperTypeConverter(converter);
          return true;
       } else {
@@ -41,7 +41,7 @@ public class RootRegistry extends RegisterableRegistry<String, Registry<?, ?>> {
    }
 
    /**
-    * Unregister a Registry and it's RegistryConverter.
+    * Unregister a Registry and it's RegistryValueConverter.
     *
     * @param key The key for the Registry.
     *
@@ -57,7 +57,7 @@ public class RootRegistry extends RegisterableRegistry<String, Registry<?, ?>> {
    }
 
    /**
-    * Unregister a Registry and it's RegistryConverter.
+    * Unregister a Registry and it's RegistryValueConverter.
     *
     * @param val The Registry.
     *

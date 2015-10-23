@@ -7,8 +7,6 @@ import nl.larsdenbakker.operation.procedure.ProcedureTemplate;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import nl.larsdenbakker.app.Module;
@@ -124,71 +122,76 @@ public class OperationFactory {
 
    private static OperationTemplate createProcedure(Module parentModule, OperationModule operationModule, Storage storage) throws InvalidInputException {
       Variable[] variables = createVariables(operationModule, storage);
-      final String operationsKey = "operations";
+      final String operationsKey = "local operations";
       Storage operationsStorage = storage.getAndAssert(operationsKey, Storage.class);
-      Map<String, Variable> variablesMap = new HashMap();
-      for (Variable variable : variables) {
-         variablesMap.put(variable.getName(), variable);
-      }
-      Map<String, OperationTemplate> operationTemplates = createProcedureOperations(parentModule, operationModule, operationsStorage, variablesMap);
-      ProcedureTask[] procedureTasks = createProcedureTasks(operationModule, operationTemplates, storage);
+      ProcedureTask[] procedureTasks = createProcedureTasks(operationModule, storage);
       ProcedureTemplate procedureTemplate = new ProcedureTemplate(parentModule, operationModule, storage.getStorageKey(), variables, procedureTasks);
       return procedureTemplate;
 
    }
 
-   private static Map<String, OperationTemplate> createProcedureOperations(Module parentModule, OperationModule operationModule, Storage storage, Map<String, Variable> parentVariablesMap) throws InvalidInputException {
-      final String nameKey = "name";
-      Map<String, OperationTemplate> operations = new LinkedHashMap(); //Linked in order to maintain order
-      OperationRegistry registry = operationModule.getOperationRegistry();
-      for (Storage node : storage.getNodes()) {
-         String type = node.getAndAssert(nameKey, String.class);
-         String name = node.getStorageKey();
-         OperationTemplate template = registry.getByKey(type);
-         if (template != null) {
-            Variable[] variables = createVariables(operationModule, node);
-            //Map parent variables, override with local variables and wrap it back into an array
-            Map<String, Variable> localVariablesMap = new HashMap();
-            localVariablesMap.putAll(parentVariablesMap);
-            for (Variable variable : variables) {
-               localVariablesMap.put(variable.getName(), variable);
-            }
-            ProcedureTask task = new OperationSequence(template);
-            operations.put(name, new ProcedureTemplate(parentModule, operationModule, name, CollectionUtils.asArrayOfType(Variable.class, localVariablesMap.values()), task));
-         } else {
-            throw new InvalidInputException("Did not find any Operation called: " + type + " specified at: '" + node.getStoragePath() + "." + nameKey + "'");
-         }
-      }
-      return operations;
-   }
-
-   private static ProcedureTask[] createProcedureTasks(OperationModule operationModule, Map<String, OperationTemplate> operations, Storage storage) throws InvalidInputException {
+//   private static Map<String, OperationTemplate> createProcedureOperations(Module parentModule, OperationModule operationModule, Storage storage, Map<String, Variable> parentVariablesMap) throws InvalidInputException {
+//      final String nameKey = "name";
+//      Map<String, OperationTemplate> operations = new LinkedHashMap(); //Linked in order to maintain order
+//      OperationRegistry registry = operationModule.getOperationRegistry();
+//      for (Storage node : storage.getNodes()) {
+//         String type = node.getAndAssert(nameKey, String.class);
+//         String name = node.getStorageKey();
+//         OperationTemplate template = registry.getByKey(type);
+//         if (template != null) {
+//            Variable[] variables = createVariables(operationModule, node);
+//            //Map parent variables, override with local variables and wrap it back into an array
+//            Map<String, Variable> localVariablesMap = new HashMap();
+//            localVariablesMap.putAll(parentVariablesMap);
+//            for (Variable variable : variables) {
+//               localVariablesMap.put(variable.getName(), variable);
+//            }
+//            ProcedureTask task = new OperationSequence(template);
+//            operations.put(name, new ProcedureTemplate(parentModule, operationModule, name, CollectionUtils.asArrayOfType(Variable.class, localVariablesMap.values()), task));
+//         } else {
+//            throw new InvalidInputException("Did not find any Operation called: " + type + " specified at: '" + node.getStoragePath() + "." + nameKey + "'");
+//         }
+//      }
+//      return operations;
+//   }
+   private static ProcedureTask[] createProcedureTasks(OperationModule operationModule, Storage storage) throws InvalidInputException {
       final String conditionsKey = "conditionals";
+      final String operationsKey = "operations";
 
-      Storage conditionsNode = storage.getStorage(conditionsKey, false);
-      if (conditionsNode != null) {
+      if (storage.isStorage(conditionsKey)) {
+         Storage conditionsNode = storage.getAndAssertStorage(conditionsKey);
          //It is a procedure with if/then/else conditionals
          List<ProcedureTask> procedures = new ArrayList();
          for (String key : conditionsNode.getKeys()) {
-            ProcedureTask procedureTask = createProcedureTask(operationModule, operations, storage, key);
+            ProcedureTask procedureTask = createProcedureTask(operationModule, storage, key);
             procedures.add(procedureTask);
          }
          return procedures.toArray(new ProcedureTask[procedures.size()]);
+      } else if (storage.isSet(operationsKey)) {
+         List<String> operationNames = storage.getAndAssertCollection(operationsKey, List.class, String.class, 0);
+         List<OperationTemplate> operations = new ArrayList();
+         for (String operationName : operationNames) {
+            OperationTemplate template = operationModule.getOperationRegistry().getByKey(operationName);
+            if (template != null) {
+               operations.add(template);
+            } else {
+               throw new InvalidInputException("Could not find operation " + operationName + " specified at: " + storage.getStoragePath() + "." + operationsKey);
+            }
+         }
+         OperationTemplate[] templateArray = CollectionUtils.asArrayOfType(OperationTemplate.class, operations);
+         return CollectionUtils.asArray(new OperationSequence(templateArray));
       } else {
-         //It is a procedure with only operationTemplatesResult, we will execute the operationTemplatesResult in order without conditionals.
-         OperationTemplate[] operationTemplates = CollectionUtils.asArrayOfType(OperationTemplate.class, operations.values());
-         OperationSequence operationSequence = new OperationSequence();
-         return CollectionUtils.asArray(operationSequence);
+         throw new InvalidInputException("Could not find either " + conditionsKey + " or " + operationsKey + " at: " + storage.getStoragePath());
       }
    }
 
-   private static ProcedureTask createProcedureTask(OperationModule operationModule, Map<String, OperationTemplate> operations, Storage storage, String key) throws InvalidInputException {
+   private static ProcedureTask createProcedureTask(OperationModule operationModule, Storage storage, String key) throws InvalidInputException {
       storage.assertSet(key);
       if (storage.isStorage(key)) {
          Storage node = storage.getStorage(key);
-         ProcedureTask ifStatement = createProcedureTask(operationModule, operations, node, "if");
-         ProcedureTask thenStatement = createProcedureTask(operationModule, operations, node, "then");
-         ProcedureTask elseStatement = createProcedureTask(operationModule, operations, node, "else");
+         ProcedureTask ifStatement = createProcedureTask(operationModule, node, "if");
+         ProcedureTask thenStatement = createProcedureTask(operationModule, node, "then");
+         ProcedureTask elseStatement = createProcedureTask(operationModule, node, "else");
          ConditionalStatement conditionalStatement = new ConditionalStatement(ifStatement, thenStatement, elseStatement);
          return conditionalStatement;
       } else {
@@ -196,10 +199,7 @@ public class OperationFactory {
          List<OperationTemplate> operationList = new ArrayList();
          for (String operationName : operationNames) {
             operationName = operationName.toLowerCase();
-            OperationTemplate template = operations.get(operationName);
-            if (template == null) {
-               template = operationModule.getOperationRegistry().getByKey(operationName);
-            }
+            OperationTemplate template = operationModule.getOperationRegistry().getByKey(operationName);
             if (template != null) {
                operationList.add(template);
             } else {

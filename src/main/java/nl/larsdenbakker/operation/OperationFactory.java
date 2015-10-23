@@ -7,6 +7,7 @@ import nl.larsdenbakker.operation.procedure.ProcedureTemplate;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -109,7 +110,7 @@ public class OperationFactory {
     * @param operationModule The associated OperationModule.
     * @param fileName        The name of the file containing configuration of the Procedures.
     *
-    * @throws DataFileException if there was a problem loading the resource or file.
+    * @throws DataFileException     if there was a problem loading the resource or file.
     * @throws InvalidInputException if any of the Procedures were configured incorrectly.
     */
    public static void registerProcedures(Module parentModule, OperationModule operationModule, String fileName) throws DataFileException, InvalidInputException {
@@ -125,14 +126,18 @@ public class OperationFactory {
       Variable[] variables = createVariables(operationModule, storage);
       final String operationsKey = "operations";
       Storage operationsStorage = storage.getAndAssert(operationsKey, Storage.class);
-      Map<String, OperationTemplate> operationTemplates = createProcedureOperations(parentModule, operationModule, operationsStorage);
+      Map<String, Variable> variablesMap = new HashMap();
+      for (Variable variable : variables) {
+         variablesMap.put(variable.getName(), variable);
+      }
+      Map<String, OperationTemplate> operationTemplates = createProcedureOperations(parentModule, operationModule, operationsStorage, variablesMap);
       ProcedureTask[] procedureTasks = createProcedureTasks(operationModule, operationTemplates, storage);
       ProcedureTemplate procedureTemplate = new ProcedureTemplate(parentModule, operationModule, storage.getStorageKey(), variables, procedureTasks);
       return procedureTemplate;
 
    }
 
-   private static Map<String, OperationTemplate> createProcedureOperations(Module parentModule, OperationModule operationModule, Storage storage) throws InvalidInputException {
+   private static Map<String, OperationTemplate> createProcedureOperations(Module parentModule, OperationModule operationModule, Storage storage, Map<String, Variable> parentVariablesMap) throws InvalidInputException {
       final String nameKey = "name";
       Map<String, OperationTemplate> operations = new LinkedHashMap(); //Linked in order to maintain order
       OperationRegistry registry = operationModule.getOperationRegistry();
@@ -142,8 +147,14 @@ public class OperationFactory {
          OperationTemplate template = registry.getByKey(type);
          if (template != null) {
             Variable[] variables = createVariables(operationModule, node);
+            //Map parent variables, override with local variables and wrap it back into an array
+            Map<String, Variable> localVariablesMap = new HashMap();
+            localVariablesMap.putAll(parentVariablesMap);
+            for (Variable variable : variables) {
+               localVariablesMap.put(variable.getName(), variable);
+            }
             ProcedureTask task = new OperationSequence(template);
-            operations.put(name, new ProcedureTemplate(parentModule, operationModule, name, variables, task));
+            operations.put(name, new ProcedureTemplate(parentModule, operationModule, name, CollectionUtils.asArrayOfType(Variable.class, localVariablesMap.values()), task));
          } else {
             throw new InvalidInputException("Did not find any Operation called: " + type + " specified at: '" + node.getStoragePath() + "." + nameKey + "'");
          }

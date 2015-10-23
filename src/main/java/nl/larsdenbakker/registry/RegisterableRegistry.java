@@ -5,7 +5,6 @@ import java.util.Iterator;
 import nl.larsdenbakker.app.Module;
 import nl.larsdenbakker.conversion.ConversionException;
 import nl.larsdenbakker.datafile.DataFile;
-import nl.larsdenbakker.util.TextUtils;
 
 /**
  * A Registry for Registrables. Contains helper methods to simplify registration

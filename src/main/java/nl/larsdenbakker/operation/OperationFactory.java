@@ -133,11 +133,11 @@ public class OperationFactory {
    }
 
    private static Map<String, OperationTemplate> createProcedureOperations(Module parentModule, OperationModule operationModule, Storage storage) throws InvalidInputException {
-      final String typeKey = "type";
+      final String nameKey = "name";
       Map<String, OperationTemplate> operations = new LinkedHashMap(); //Linked in order to maintain order
       OperationRegistry registry = operationModule.getOperationRegistry();
       for (Storage node : storage.getNodes()) {
-         String type = node.getAndAssert(typeKey, String.class);
+         String type = node.getAndAssert(nameKey, String.class);
          String name = node.getStorageKey();
          OperationTemplate template = registry.getByKey(type);
          if (template != null) {
@@ -145,7 +145,7 @@ public class OperationFactory {
             ProcedureTask task = new OperationSequence(template);
             operations.put(name, new ProcedureTemplate(parentModule, operationModule, name, variables, task));
          } else {
-            throw new InvalidInputException("Did not find any Operation called: " + type + " specified at: '" + node.getStoragePath() + "." + typeKey + "'");
+            throw new InvalidInputException("Did not find any Operation called: " + type + " specified at: '" + node.getStoragePath() + "." + nameKey + "'");
          }
       }
       return operations;
